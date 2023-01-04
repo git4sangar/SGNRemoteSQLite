@@ -6,6 +6,7 @@
 #include <sstream>
 
 #include <nlohmann_json.hpp>
+#include "Logger.h"
 #include "RESTful.h"
 
 using json = nlohmann::json;
@@ -36,7 +37,7 @@ void RESTful::selectQuery(const PistacheReq &request, PistacheResp response) {
 		return;
 	}
 
-    std::cout << "Got a select query : " << strQuery << std::endl;
+    mLogger << "Got a select query : " << strQuery << std::endl;
     json pRoot      = mpDBInterface->selectQuery(strQuery);
     if(!pRoot.is_array()) {
         response.send(Pistache::Http::Code::Not_Found, packResp(false, "No Resp").dump(), MIME(Application, Json));
@@ -58,8 +59,8 @@ void RESTful::selectUpdate(const PistacheReq &request, PistacheResp& response, b
     }
 
     (bFlag) ?
-    std::cout << "Got a select-succeed-update query : " << strQuery << std::endl :
-    std::cout << "Got a select-not-update query : " << strQuery << std::endl;
+    mLogger << "Got a select-succeed-update query : " << strQuery << std::endl :
+    mLogger << "Got a select-not-update query : " << strQuery << std::endl;
 
     bool isCommitted        = mpDBInterface->selectAndUpdate(strQuery, bFlag);
     if(isCommitted)  response.send(Pistache::Http::Code::Ok, packResp(true, "Committed").dump(), MIME(Application, Json));
@@ -72,7 +73,7 @@ void RESTful::updateQuery(const PistacheReq &request, PistacheResp response) {
         response.send(Pistache::Http::Code::Not_Found, packResp(false, "Blank Query").dump(), MIME(Application, Json));
         return;
     }
-    std::cout << "Got a update query : " << strQuery << std::endl;
+    mLogger << "Got a update query : " << strQuery << std::endl;
     bool isCommitted= mpDBInterface->transacStmt(strQuery);
 
     if(isCommitted)  response.send(Pistache::Http::Code::Ok, packResp(true, "Committed").dump(), MIME(Application, Json));

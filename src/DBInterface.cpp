@@ -56,12 +56,12 @@ bool DBInterface::transacStmt(const std::string& pTransc) {
     try {
         for(const auto& query : queries) {
             if(query.empty()) continue;
-            std::cout << "Executing : " << query << std::endl;
+            mLogger << "Executing : " << query << std::endl;
             mDB->exec(query);
         }
         transaction.commit();
     } catch(SQLite::Exception& sqlEx) {
-        std::cout << sqlEx.what() << std::endl;
+        mLogger << sqlEx.what() << std::endl;
         return false;
     }
     return true;
@@ -74,12 +74,12 @@ bool DBInterface::transacStmt(const std::vector<std::string>& pQueries) {
     try {
         for(const auto& query : pQueries) {
             if(query.empty()) continue;
-            std::cout << "Executing : " << query << std::endl;
+            mLogger << "Executing : " << query << std::endl;
             mDB->exec(query);
         }
         transaction.commit();
     } catch(SQLite::Exception& sqlEx) {
-        std::cout << sqlEx.what() << std::endl;
+        mLogger << sqlEx.what() << std::endl;
         return false;
     }
     return true;
@@ -92,7 +92,7 @@ bool DBInterface::selectAndUpdate(const std::string &pTransc, bool bFlag) {
     if(queries.size() < 2) return false;
 
     SQLite::Statement query(*mDB, queries[0]);
-    std::cout << "Executing : " << queries[0] << std::endl;
+    mLogger << "Executing : " << queries[0] << std::endl;
     if(query.executeStep() == bFlag) {
         queries.erase(queries.begin());
         return transacStmt(queries);

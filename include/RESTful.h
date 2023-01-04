@@ -11,6 +11,7 @@
 #include <pistache/router.h>
 
 #include "DBInterface.h"
+#include "Logger.h"
 
 class RESTful {
 public:
@@ -19,6 +20,7 @@ public:
 
 private:
     DBInterface::Ptr mpDBInterface;
+    Logger&	mLogger;
     Pistache::Rest::Router mRouter;
     std::shared_ptr<Pistache::Http::Endpoint> mEndPoint;
 
@@ -34,8 +36,9 @@ private:
 public:
     RESTful(uint32_t pPort, DBInterface::Ptr pDBInterface)
         : mpDBInterface(pDBInterface)
-        , mEndPoint(std::make_shared<Pistache::Http::Endpoint>(Pistache::Address("68.183.84.172", pPort)))
-        //, mEndPoint(std::make_shared<Pistache::Http::Endpoint>(Pistache::Address("UGC13R4HN83.chennaigtbc.ford.com", pPort)))
+        , mLogger(Logger::getInstance())
+        //, mEndPoint(std::make_shared<Pistache::Http::Endpoint>(Pistache::Address("68.183.84.172", pPort)))
+        , mEndPoint(std::make_shared<Pistache::Http::Endpoint>(Pistache::Address("UGC13R4HN83.chennaigtbc.ford.com", pPort)))
     {}
 
     virtual ~RESTful() {}

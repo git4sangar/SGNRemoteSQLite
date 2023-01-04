@@ -9,17 +9,20 @@
 
 #include "SQLiteCpp/SQLiteCpp.h"
 #include "nlohmann_json.hpp"
+#include "Logger.h"
 
 using json = nlohmann::json;
 
 class DBInterface {
+    Logger& mLogger;
     std::shared_ptr<SQLite::Database> mDB;
     std::unordered_map<std::string, int16_t> mNameToType;
 
     std::vector<std::string>    splitString(const std::string& pString);
 public:
     typedef std::shared_ptr<DBInterface> Ptr;
-    DBInterface(std::string pDBFileName) {
+    DBInterface(std::string pDBFileName)
+    : mLogger(Logger::getInstance()) {
         mDB = std::make_shared<SQLite::Database>(pDBFileName, SQLite::OPEN_READWRITE);
     }
 
